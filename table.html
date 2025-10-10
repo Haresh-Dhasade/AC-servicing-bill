@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AC Servicing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #eaf7fa 0%, #b0e5f9 100%);
+      min-height: 100vh;
+      color: #23406f;
+    }
+    .main-container {
+      background: #fff;
+      max-width: 900px;
+      margin: 36px auto;
+      border-radius: 22px;
+      box-shadow: 0 10px 40px #1597ff1a;
+      border: 1px solid #dbe8fa;
+      padding: 36px 24px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .header img {
+      height: 72px;
+      filter: drop-shadow(0 1px 3px #81C78470);
+      transition: filter 0.4s;
+    }
+    .header img:hover {
+      filter: drop-shadow(0 6px 20px #4fc3f7a6);
+    }
+    .info {
+      text-align: center;
+      font-size: 20px;
+      background: linear-gradient(90deg, #fafdff, #e0f7fa 65%);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px #aeeaf666;
+      margin-bottom: 22px;
+      line-height: 1.8;
+      border-bottom: 5px solid;
+      border-image: linear-gradient(to right, #43aeea, #6fe1a3) 1;
+    }
+    .bill-no {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      gap: 15px;
+      margin: 13px 0 20px 0;
+      font-size: 17px;
+      letter-spacing: 2px;
+      color: #276991;
+      background: #e3f8ff76;
+      padding: 10px 15px 10px 26px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #81C78420;
+      border: 1px solid #81C78418;
+      width: fit-content;
+    }
+    .bill-no input {
+      width: 68px;
+      padding: 4px 2px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 7px;
+      border: 2px solid #43aeea;
+      background: linear-gradient(90deg,#e3f7fc 0%,#ffffff 100%);
+      outline: none;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+    .bill-no input:focus {
+      border-color: #1565c0;
+      box-shadow: 0 0 8px #43aeea3c;
+      background: #f0fafc;
+    }
+    /* Top section: stacked vertically, aligned left */
+    .top-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .address-box, .date-box {
+      width: 260px; /* narrow width for 3-4 words approx */
+    }
+    textarea.address-input {
+      width: 260px;
+      height: 70px; /* multiline height */
+      resize: vertical;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 7px;
+      border: 2px solid #81C784;
+      margin-top: 5px;
+      background: linear-gradient(90deg,#f9fff9 0%,#e0f5ff 100%);
+      box-shadow: 0 2px 4px #dbe8fa60;
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    input.date-input {
+      width: 130px; /* smaller width appropriate for date */
+      padding: 10px 7px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 7px;
+      border: 2px solid #81C784;
+      margin-top: 5px;
+      background: linear-gradient(90deg,#f9fff9 0%,#e0f5ff 100%);
+      box-shadow: 0 2px 4px #dbe8fa60;
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    textarea.address-input:focus, input.date-input:focus {
+      box-shadow: 0 7px 18px #4FC3F730;
+      border-color: #4FC3F7;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 26px;
+      font-size: 16px;
+      border-radius: 13px;
+      box-shadow: 0 2px 14px #81c7840c;
+      background: #fff;
+      overflow: hidden;
+    }
+    th {
+      background: linear-gradient(90deg, #e1f5fe 0%, #b3e5fc 100%);
+      color: #215b7c;
+      font-weight: bold;
+      border: 0;
+      padding: 11px 7px;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    td {
+      padding: 8px 6px;
+      border: 1px solid #aeeaf6;
+      font-size: 16px;
+      vertical-align: top;
+      text-align: center;
+      background: rgba(200,247,255,0.08);
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 5px 2px;
+      resize: vertical;
+      font-size: 15px;
+      text-align: center;
+      border-radius: 6px;
+      border: 1px solid #bde1fa;
+      background: #f7fdff;
+      transition: border 0.2s;
+    }
+    textarea.amount {
+      height: 44px;
+      min-width: 60px;
+      background: #e3f7fc;
+    }
+    textarea:focus,
+    input[type="text"]:focus {
+      border-color: #1976D2;
+    }
+    tfoot td {
+      font-weight: bold;
+      background: #e6faff;
+      font-size: 17px;
+      letter-spacing: 1px;
+    }
+    tfoot td#totalAmount {
+      color: #155a7b;
+      font-size: 18px;
+      text-shadow: 0 1px 3px #81C78440;
+    }
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 13px 34px;
+      font-size: 19px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.25s, transform 0.22s, box-shadow 0.3s;
+      box-shadow: 0 2px 10px #81C78440;
+      background: linear-gradient(100deg, #e3f7fc 0%, #b3e5fc 100%);
+      color: #184862;
+      outline: none;
+      letter-spacing: 2px;
+    }
+    #addRowBtn {
+      background: linear-gradient(90deg, #4FC3F7 0%, #81C784 100%);
+      color: white;
+    }
+    #addRowBtn:hover {
+      background: linear-gradient(80deg, #3eaedb 0%, #64b662 98%);
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px #4FC3F720;
+    }
+    #printBtn {
+      background: linear-gradient(90deg, #1565c0 0%, #1976D2 100%);
+      color: #fff;
+    }
+    #printBtn:hover {
+      background: linear-gradient(80deg, #104c8a 0%, #2274c1 100%);
+      transform: scale(1.03);
+    }
+    .deleteBtn {
+      background: linear-gradient(90deg, #ef5350, #b71c1c 70%);
+      color: #fff;
+      box-shadow: 0 1px 4px #ef535060;
+      font-size: 16px;
+      padding: 8px 20px;
+      border-radius: 8px;
+      transition: background 0.3s, box-shadow 0.2s;
+    }
+    .deleteBtn:hover {
+      background: linear-gradient(90deg, #e53935 0%, #b71c1c 100%);
+      box-shadow: 0 8px 16px #de453540;
+      transform: scale(1.05);
+    }
+    .signature {
+      text-align: right;
+      margin-top: 38px;
+      margin-bottom: 7px;
+      padding-right: 10px;
+    }
+    .signature img {
+      width: 165px;
+      max-width: 46vw;
+      filter: drop-shadow(0 1px 8px #81C78430);
+    }
+    .signature-text {
+      color: #1565c0;
+      font-size: 17px;
+      letter-spacing: 1.2px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    @media(max-width: 1100px) {
+      .main-container {
+        padding: 12px 2vw;
+      }
+    }
+    @media(max-width: 700px) {
+      .main-container {
+        margin: 7vw 1vw;
+        padding: 7px 3vw;
+      }
+      .header img {
+        height: 30px;
+      }
+      .info {
+        font-size: 14px;
+      }
+      table, th, td {
+        font-size: 12px;
+      }
+      .signature img {
+        width: 44px;
+      }
+      .buttons button {
+        font-size: 15px;
+        padding: 7px 15px;
+      }
+      /* Narrow address and date on mobile */
+      .address-box, .date-box {
+        width: 100% !important;
+      }
+      textarea.address-input {
+        width: 100% !important;
+      }
+      input.date-input {
+        width: 100% !important;
+      }
+    }
+    @media(max-width: 480px) {
+      .main-container {
+        padding: 3px 2vw;
+        margin: 4vw 1vw;
+      }
+      .info {
+        font-size: 11px;
+        padding: 6px 1px;
+      }
+      th, td {
+        padding: 2px 1px;
+        font-size: 10px;
+      }
+      .signature img {
+        width: 26px;
+      }
+      .signature-text {
+        font-size: 12px;
+      }
+    }
+    @media print {
+      button, .deleteBtn {
+        display: none !important;
+      }
+      textarea,
+      input[type="text"],
+      input[type="date"] {
+        border: none !important;
+        resize: none;
+        overflow: hidden;
+        background: none;
+      }
+      textarea::placeholder,
+      input::placeholder {
+        color: transparent;
+      }
+      th:last-child,
+      td:last-child {
+        display: none !important;
+      }
+      .main-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+      }
+      body {
+        margin: 2mm;
+        background: #fff !important;
+        zoom: 0.85;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="header">
+      <img src="corner.png" alt="Left Logo" />
+      <img src="logo.png" alt="Right Logo" />
+    </div>
+    <div class="info">
+      <strong>NAME:</strong> <strong>BHARAT DESALE</strong><br />
+      <strong>ADDRESS:</strong> DALAL ENTERPRISES SHOP NO 2, GANESH MANDIR ROAD, NEAR VITTHAL MANDIR, TITWALA EAST 421605<br />
+      <strong>SERVICES:</strong> SPLIT AC, WINDOW AC, CASSET AC, AC SERVICE AND ALL AC PARTS REPAIRING<br />
+      <strong>PHONE NO. :</strong> 8850104177
+    </div>
+    <div class="bill-no">
+      <span>Bill No.:</span>
+      <input type="text" placeholder="000000" id="billNo" maxlength="6" />
+    </div>
+    <div class="top-section">
+      <div class="address-box">
+        <label for="address">Address:</label>
+        <textarea id="address" class="address-input" placeholder="Enter address here"></textarea>
+      </div>
+      <div class="date-box">
+        <label for="date">Date:</label>
+        <input type="date" id="date" class="date-input" />
+      </div>
+    </div>
+    <table id="acTable">
+      <thead>
+        <tr>
+          <th>SR NO</th>
+          <th>AC (TR) TONS</th>
+          <th>LOCATION</th>
+          <th>MATERIAL NAME & QUANTITY</th>
+          <th>AMOUNT</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr>
+          <td>1</td>
+          <td><input type="text" placeholder="AC Type" /></td>
+          <td><input type="text" placeholder="Location" /></td>
+          <td><textarea placeholder="Material & Quantity"></textarea></td>
+          <td>
+            <textarea class="amount" placeholder="0" oninput="calculateTotal()"></textarea>
+          </td>
+          <td><button class="deleteBtn" onclick="deleteRow(this)">Delete</button></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">Total</td>
+          <td id="totalAmount">0.00</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="signature">
+      <div class="signature-text"></div>
+      <img src="signature.png" alt="Signature" />
+    </div>
+    <div class="buttons">
+      <button id="addRowBtn" onclick="addRow()">Add Row</button>
+      <button id="printBtn" onclick="window.print()">Print</button>
+    </div>
+  </div>
+  <script>
+    function evaluateExpression(expr) {
+      try {
+        const sanitized = expr.replace(/[^-()\d/*+.]/g, '');
+        const result = Function('"use strict";return (' + sanitized + ')')();
+        return isNaN(result) ? 0 : result;
+      } catch {
+        return 0;
+      }
+    }
+    function calculateTotal() {
+      let total = 0;
+      document.querySelectorAll('.amount').forEach(area => {
+        const expr = area.value;
+        const val = evaluateExpression(expr);
+        total += val;
+      });
+      document.getElementById('totalAmount').textContent = total.toFixed(2);
+    }
+    function addRow() {
+      const tableBody = document.getElementById('tableBody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td></td>
+        <td><input type="text" placeholder="AC Type" /></td>
+        <td><input type="text" placeholder="Location" /></td>
+        <td><textarea placeholder="Material & Quantity"></textarea></td>
+        <td><textarea class="amount" placeholder="0" oninput="calculateTotal()"></textarea></td>
+        <td><button class="deleteBtn" onclick="deleteRow(this)">Delete</button></td>
+      `;
+      tableBody.appendChild(newRow);
+      updateSerialNumbers();
+    }
+    function deleteRow(button) {
+      const row = button.closest('tr');
+      row.remove();
+      calculateTotal();
+      updateSerialNumbers();
+    }
+    function updateSerialNumbers() {
+      const rows = document.querySelectorAll('#tableBody tr');
+      rows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+      });
+    }
+    window.onload = function () {
+      updateSerialNumbers();
+      calculateTotal();
+    };
+  </script>
+</body>
+</html>
